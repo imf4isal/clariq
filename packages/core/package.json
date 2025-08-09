@@ -1,0 +1,19 @@
+{
+  "name": "@clariq/core",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "pg": "^8.11.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.0",
+    "@types/js-yaml": "^4.0.5"
+  }
+}
