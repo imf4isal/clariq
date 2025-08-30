@@ -1,5 +1,5 @@
 import {Pool, QueryResult as PgQueryResult} from "pg";
-import {PostgreSQLConfig, QueryResult} from "./types";
+import {PostgreSQLConfig, QueryResult} from "./types.mjs";
 
 export class PostgreSQLConnection {
     private pool: Pool;
@@ -7,17 +7,27 @@ export class PostgreSQLConnection {
 
     constructor(config: PostgreSQLConfig) {
         this.config = config;
-        this.pool = new Pool({
-            host: config.host,
-            port: config.port,
-            database: config.database,
-            user: config.username,
-            password: config.password,
-            ssl: config.ssl,
-            connectionTimeoutMillis: config.timeoutMs || 10000,
-            idleTimeoutMillis: config.idleTimeoutMillis || 30000,
-            application_name: config.applicationName || "Clariq",
-        }) as Pool;
+        
+        if (config.url) {
+            this.pool = new Pool({
+                connectionString: config.url,
+                connectionTimeoutMillis: config.timeoutMs || 10000,
+                idleTimeoutMillis: config.idleTimeoutMillis || 30000,
+                application_name: config.applicationName || "Clariq",
+            }) as Pool;
+        } else {
+            this.pool = new Pool({
+                host: config.host,
+                port: config.port,
+                database: config.database,
+                user: config.username,
+                password: config.password,
+                ssl: config.ssl,
+                connectionTimeoutMillis: config.timeoutMs || 10000,
+                idleTimeoutMillis: config.idleTimeoutMillis || 30000,
+                application_name: config.applicationName || "Clariq",
+            }) as Pool;
+        }
     }
 
     async connect(): Promise<void> {

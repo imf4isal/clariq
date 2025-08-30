@@ -1,5 +1,5 @@
-import {PostgreSQLConfig, QueryResult} from "./types";
-import {PostgreSQLConnection} from "./postresql-connection";
+import {PostgreSQLConfig, QueryResult} from "./types.mjs";
+import {PostgreSQLConnection} from "./postresql-connection.mjs";
 
 export class ConnectionManager {
     private connections: Map<string, PostgreSQLConnection> = new Map();
