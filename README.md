@@ -11,24 +11,31 @@ A lightweight, open-source analytics platform that starts with the essentials �
 
 ## 🚀 Current Status
 
-**✅ Project Setup Complete** - Turborepo monorepo with TypeScript
-- `@clariq/core` - Shared utilities, database connections
-- `@clariq/alert-engine` - Standalone notification system
-- `@clariq/cli` - Command-line interface
+**✅ POC Phase Complete** - Ready for production use!
+- PostgreSQL database connectivity with connection pooling
+- CLI interface for SQL query execution  
+- JSON result output with comprehensive error handling
+- **Connection profile storage** - save database connections, no more repetitive URLs
+- Named connection management with default profile support
+- Real database validation completed
 
-**🔄 In Development** - POC Phase
-- PostgreSQL connectivity
-- SQL query execution
-- JSON result output
+**🔄 Next Phase** - Basic Frontend (Phase 0)
+- Simple web UI for database connections
+- SQL editor with syntax highlighting
+- Result visualization as tables
 
 ## 📋 Roadmap
 
-### Proof of Concept (POC)
+### Proof of Concept (POC) ✅ **COMPLETED**
 - [x] Project structure and monorepo setup
-- [ ] Connect to PostgreSQL database
-- [ ] Run SQL queries from CLI
-- [ ] Return results as JSON
-- [ ] Basic alert/notification system
+- [x] Connect to PostgreSQL database with connection pooling
+- [x] Run SQL queries from CLI with parameter binding
+- [x] Return results as JSON with execution metrics
+- [x] Connection profile storage system (save/load/manage database connections)
+- [x] Named connection management with environment variable fallback
+- [x] Real database testing and validation
+- [x] Comprehensive error handling and resource cleanup
+- [ ] Basic alert/notification system (stub implementation exists)
 
 ### Phase 0 - Basic UI
 - [ ] Simple frontend for database connection
@@ -57,18 +64,48 @@ A lightweight, open-source analytics platform that starts with the essentials �
 - PostgreSQL (for development)
 
 ### Getting Started
+
+#### Quick Setup
 ```bash
 # Clone the repository
 git clone https://github.com/YOUR_USERNAME/clariq.git
 cd clariq
 
-# Install dependencies
+# Install dependencies and build
 pnpm install
-
-# Build all packages
 pnpm build
+```
 
-# Start development mode
+#### Database Connection Setup
+```bash
+# Save your database connection (one-time setup)
+node ./packages/cli/dist/cli.js profile add production \
+  --url "postgresql://user:password@host:port/database" \
+  --description "My database" \
+  --default
+
+# Test the connection
+node ./packages/cli/dist/cli.js profile test production
+```
+
+#### Usage Examples
+```bash
+# List saved profiles
+node ./packages/cli/dist/cli.js profile list
+
+# Run queries using default profile (no URL needed!)
+node ./packages/cli/dist/cli.js run "SELECT * FROM users LIMIT 10"
+
+# Use specific profile
+node ./packages/cli/dist/cli.js run "SELECT COUNT(*) FROM orders" --profile production
+
+# Test connection
+node ./packages/cli/dist/cli.js test --profile production
+```
+
+#### Development Mode
+```bash
+# Start development with watch mode
 pnpm dev
 ```
 
@@ -76,11 +113,31 @@ pnpm dev
 ```
 clariq/
 ├── packages/
-│   ├── core/           # Shared utilities, DB connections
-│   ├── alert-engine/   # Standalone alert system
-│   └── cli/            # Command-line interface
+│   ├── core/           # Database connectivity, connection management, config storage
+│   ├── alert-engine/   # Standalone alert system (stub)
+│   └── cli/            # Command-line interface with profile management
+├── context/            # Project documentation and requirements
 ├── examples/           # Sample configurations
-└── docs/              # Documentation
+└── ~/.clariq/          # User profiles stored as profiles.yaml
+```
+
+### CLI Commands
+```bash
+# Profile Management
+clariq profile add <name> --url <url> [--default]     # Save connection
+clariq profile list                                   # List all profiles  
+clariq profile remove <name>                          # Delete profile
+clariq profile test <name>                            # Test connection
+
+# Query Execution  
+clariq run <query> [--profile <name>]                 # Execute SQL
+clariq test [--profile <name>]                        # Test connection
+
+# Connection Priority (highest to lowest)
+# 1. Explicit --url flag
+# 2. --profile flag  
+# 3. Default profile
+# 4. CLARIQ_DATABASE_URL environment variable
 ```
 
 ### Scripts
@@ -90,25 +147,32 @@ clariq/
 - `pnpm lint` - Lint all packages
 - `pnpm clean` - Clean build artifacts
 
-## 🔧 Alert Engine (Standalone)
+## 🚀 Quick Start for New Machines
 
-The alert engine can be used independently:
+Deploy Clariq on a new machine in 3 steps:
 
-**As Docker Container:**
 ```bash
-docker run -v $(pwd)/alerts.yaml:/config/alerts.yaml clariq/alert-engine
+# 1. Clone and build
+git clone <repo-url> && cd clariq
+pnpm install && pnpm build
+
+# 2. Add your database connection  
+node ./packages/cli/dist/cli.js profile add production \
+  --url "postgresql://user:pass@host:port/database" \
+  --default
+
+# 3. Start querying (no more connection details needed!)
+node ./packages/cli/dist/cli.js run "SELECT 1"
 ```
 
-**As CLI:**
-```bash
-npx @clariq/alert-engine run --config alerts.yaml
-```
+## 🔧 Alert Engine (Future Enhancement)
 
-**As Library:**
+The alert engine has stub implementation ready for development:
+
 ```javascript
 import { createAlertEngine } from '@clariq/alert-engine';
 const engine = createAlertEngine('postgresql://...');
-engine.start();
+engine.start(); // Currently logs "Alert engine started"
 ```
 
 ## 📖 Documentation
