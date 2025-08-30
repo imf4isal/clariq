@@ -113,8 +113,8 @@ engine.start();
 
 ## 📖 Documentation
 
-- [Project Brief](./clariq.md) - Detailed project overview and phases
-- [Alert System Design](./alert.md) - Modular notification system specs
+- [Project Brief](context/clariq.md) - Detailed project overview and phases
+- [Alert System Design](context/alert.md) - Modular notification system specs
 - [Development Guide](./CLAUDE.md) - Development principles and approach
 
 ## 🤝 Contributing
