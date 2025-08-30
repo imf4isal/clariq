@@ -33,3 +33,36 @@ export interface PostgreSQLConfig extends ConnectionConfig {
     idleTimeoutMillis?: number;
     searchPath?: string[];
 }
+
+// connection profile for storage
+export interface ConnectionProfile {
+    name: string;
+    description?: string;
+    config: PostgreSQLConfig;
+    createdAt?: Date;
+    lastUsed?: Date;
+}
+
+// profile configuration file structure
+export interface ProfileConfig {
+    default?: string;
+    profiles: Record<string, {
+        description?: string;
+        url?: string;
+        host?: string;
+        port?: number;
+        database?: string;
+        username?: string;
+        password?: string;
+        ssl?: boolean;
+        schema?: string;
+        applicationName?: string;
+        sslMode?: 'require' | 'prefer' | 'allow' | 'disable';
+        poolSize?: number;
+        timeoutMs?: number;
+        idleTimeoutMillis?: number;
+        searchPath?: string[];
+        createdAt?: string;
+        lastUsed?: string;
+    }>;
+}
